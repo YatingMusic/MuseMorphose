@@ -10,3 +10,12 @@ rm remi_dataset.tar.gz
 # compute attributes classes
 python3 attributes.py
 ```
+
+## Training
+```bash
+python3 train.py [config file]
+```
+* e.g.
+```bash
+python3 train.py config/default.yaml
+```
