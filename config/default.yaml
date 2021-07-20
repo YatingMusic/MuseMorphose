@@ -1,0 +1,45 @@
+data:
+    data_dir:         ./remi_dataset
+    train_split:      ./pickles/train_pieces.pkl
+    val_split:        ./pickles/val_pieces.pkl
+    test_split:       ./pickles/test_pieces.pkl
+    vocab_path:       ./pickles/remi_vocab.pkl
+    max_bars:         16
+    enc_seqlen:       128
+    dec_seqlen:       1280
+    batch_size:       4
+
+model:
+    enc_n_layer:      12
+    enc_n_head:       8
+    enc_d_model:      512
+    enc_d_ff:         2048
+    dec_n_layer:      12
+    dec_n_head:       8
+    dec_d_model:      512
+    dec_d_ff:         2048
+    d_embed:          512
+    d_latent:         128
+    d_polyph_emb:     64
+    d_rfreq_emb:      64
+    cond_mode:        in-attn
+    pretrained_params_path:       null
+    pretrained_optim_path:        null
+
+training:
+    device:           cuda:0
+    ckpt_dir:         ./ckpt/enc_dec_12L-16_bars-seqlen_1280
+    trained_steps:    0
+    max_epochs:       1000
+    max_lr:           1.0e-4
+    min_lr:           5.0e-6
+    lr_warmup_steps:  200
+    lr_decay_steps:   150000
+    no_kl_steps:      10000
+    kl_cycle_steps:   5000
+    kl_max_beta:      1.0
+    free_bit_lambda:  0.25
+    constant_kl:      False
+    ckpt_interval:    50
+    log_interval:     10
+    val_interval:     50
