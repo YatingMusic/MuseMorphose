@@ -17,14 +17,14 @@ config_path = sys.argv[1]
 config = yaml.load(open(config_path, 'r'), Loader=yaml.FullLoader)
 
 device = config['training']['device']
-ckpt_path = 'musemorphose_pretrained_weights.pt'
-
 data_dir = config['data']['data_dir']
 vocab_path = config['data']['vocab_path']
 data_split = 'pickles/test_pieces.pkl'
-n_pieces, n_samples_per_piece = 10, 5
 
-out_dir = 'gens/test02'
+ckpt_path = sys.argv[2]
+out_dir = sys.argv[3]
+n_pieces = int(sys.argv[4])
+n_samples_per_piece = int(sys.argv[5])
 
 ###########################################
 # little helpers
@@ -100,12 +100,8 @@ def generate_on_latent_ctrl_vanilla_truncate(
     latent_placeholder[:len(generated), 0, :] = latents[0].squeeze(0)
     rfreq_placeholder[:len(generated), 0] = rfreq_cls[0]
     polyph_placeholder[:len(generated), 0] = polyph_cls[0]
-    print (latent_placeholder[:3, 0, :4])
-    print (rfreq_placeholder[:3, 0])
-    print (polyph_placeholder[:3, 0])
     
   target_bars, generated_bars = latents.size(0), 0
-  print (target_bars)
 
   steps = 0
   time_st = time.time()
@@ -192,7 +188,7 @@ def generate_on_latent_ctrl_vanilla_truncate(
 ########################################
 # change attribute classes
 ########################################
-def random_shift_attr_cls(n_samples, upper=3, lower=-3):
+def random_shift_attr_cls(n_samples, upper=4, lower=-3):
   return np.random.randint(lower, upper, (n_samples,))
 
 
@@ -240,7 +236,7 @@ if __name__ == "__main__":
     orig_out_file = os.path.join(out_dir, 'id{}_bar{}_orig'.format(
         p, p_bar_id
     ))
-    print (orig_out_file)
+    print ('[info] writing to ...', orig_out_file)
     # output reference song's MIDI
     _, orig_tempo = remi2midi(orig_song, orig_out_file + '.mid', return_first_tempo=True, enforce_tempo=False)
 
@@ -256,7 +252,11 @@ if __name__ == "__main__":
       else:
         p_data[k] = p_data[k].to(device)
 
-    p_latents = get_latent_embedding_fast(model, p_data)
+    p_latents = get_latent_embedding_fast(
+                  model, p_data, 
+                  use_sampling=config['generate']['use_latent_sampling'],
+                  sampling_var=config['generate']['latent_sampling_var']
+                )
     p_cls_diff = random_shift_attr_cls(n_samples_per_piece)
     r_cls_diff = random_shift_attr_cls(n_samples_per_piece)
 
@@ -265,26 +265,27 @@ if __name__ == "__main__":
       p_polyph_cls = (p_data['polyph_cls_bar'] + p_cls_diff[samp]).clamp(0, 7).long()
       p_rfreq_cls = (p_data['rhymfreq_cls_bar'] + r_cls_diff[samp]).clamp(0, 7).long()
 
-      print ('piece: {}, sample: {}'.format(p_id, p_bar_id))
+      print ('[info] piece: {}, bar: {}'.format(p_id, p_bar_id))
       out_file = os.path.join(out_dir, 'id{}_bar{}_sample{:02d}_poly{}_rhym{}'.format(
-        p, samp + 1, p_bar_id,
+        p, p_bar_id, samp + 1,
         '+{}'.format(p_cls_diff[samp]) if p_cls_diff[samp] >= 0 else p_cls_diff[samp], 
-        '-{}'.format(p_cls_diff[samp]) if p_cls_diff[samp] >= 0 else p_cls_diff[samp]
+        '+{}'.format(r_cls_diff[samp]) if r_cls_diff[samp] >= 0 else r_cls_diff[samp]
       ))      
-      print (out_file)
+      print ('[info] writing to ...', out_file)
       if os.path.exists(out_file + '.txt'):
         print ('[info] file exists, skipping ...')
         continue
 
-      print (p_polyph_cls, p_rfreq_cls)
+      # print (p_polyph_cls, p_rfreq_cls)
 
       # generate
       song, t_sec, entropies = generate_on_latent_ctrl_vanilla_truncate(
                                   model, p_latents, p_rfreq_cls, p_polyph_cls, dset.event2idx, dset.idx2event,
                                   max_input_len=config['data']['dec_seqlen'], 
-                                  truncate_len=512, 
-                                  nucleus_p=0.9, 
-                                  temperature=1.2
+                                  truncate_len=min(512, config['data']['dec_seqlen'] - 32), 
+                                  nucleus_p=config['generate']['nucleus_p'], 
+                                  temperature=config['generate']['temperature'],
+                                  
                                 )
       times.append(t_sec)
 

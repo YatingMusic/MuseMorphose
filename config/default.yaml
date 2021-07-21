@@ -43,3 +43,9 @@ training:
     ckpt_interval:    50
     log_interval:     10
     val_interval:     50
+
+generate:
+    temperature:                1.2
+    nucleus_p:                  0.9
+    use_latent_sampling:        False
+    latent_sampling_var:        0.0
