@@ -145,14 +145,14 @@ def train_model(epoch, model, dloader, dloader_val, optim, sched):
       model.train()
 
     if not trained_steps % ckpt_interval:
-      torch.save(model,
+      torch.save(model.state_dict(),
         os.path.join(params_dir, 'step_{:d}-RC_{:.3f}-KL_{:.3f}-model.pt'.format(
             trained_steps,
             recons_loss_ema, 
             kl_raw_ema
           ))
       )
-      torch.save(optim,
+      torch.save(optim.state_dict(),
         os.path.join(optim_dir, 'step_{:d}-RC_{:.3f}-KL_{:.3f}-optim.pt'.format(
             trained_steps,
             recons_loss_ema, 
@@ -234,22 +234,21 @@ if __name__ == "__main__":
     pieces=pickle_load(config['data']['val_split']),
     pad_to_same=True
   )
-  print (len(dset.pieces))
+  print ('[info]', '# training samples:', len(dset.pieces))
 
   dloader = DataLoader(dset, batch_size=config['data']['batch_size'], shuffle=True, num_workers=8)
   dloader_val = DataLoader(dset_val, batch_size=config['data']['batch_size'], shuffle=True, num_workers=8)
 
   mconf = config['model']
-  if not pretrained_params_path:
-    model = MuseMorphose(
-      mconf['enc_n_layer'], mconf['enc_n_head'], mconf['enc_d_model'], mconf['enc_d_ff'],
-      mconf['dec_n_layer'], mconf['dec_n_head'], mconf['dec_d_model'], mconf['dec_d_ff'],
-      mconf['d_latent'], mconf['d_embed'], dset.vocab_size,
-      d_polyph_emb=mconf['d_polyph_emb'], d_rfreq_emb=mconf['d_rfreq_emb'],
-      cond_mode=mconf['cond_mode']
-    ).to(device)
-  else:
-    model = torch.load(pretrained_params_path).to(device)
+  model = MuseMorphose(
+    mconf['enc_n_layer'], mconf['enc_n_head'], mconf['enc_d_model'], mconf['enc_d_ff'],
+    mconf['dec_n_layer'], mconf['dec_n_head'], mconf['dec_d_model'], mconf['dec_d_ff'],
+    mconf['d_latent'], mconf['d_embed'], dset.vocab_size,
+    d_polyph_emb=mconf['d_polyph_emb'], d_rfreq_emb=mconf['d_rfreq_emb'],
+    cond_mode=mconf['cond_mode']
+  ).to(device)
+  if pretrained_params_path:
+    model.load_state_dict( torch.load(pretrained_params_path) )
 
   model.train()
   n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -258,8 +257,7 @@ if __name__ == "__main__":
   opt_params = filter(lambda p: p.requires_grad, model.parameters())
   optimizer = optim.Adam(opt_params, lr=max_lr)
   if pretrained_optim_path:
-    pretrained_optim = torch.load(pretrained_optim_path)
-    optimizer.load_state_dict( pretrained_optim.state_dict() )
+    optimizer.load_state_dict( torch.load(pretrained_optim_path) )
   scheduler = optim.lr_scheduler.CosineAnnealingLR(
     optimizer, lr_decay_steps, eta_min=min_lr
   )
