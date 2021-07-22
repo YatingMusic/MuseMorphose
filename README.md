@@ -1,5 +1,19 @@
 # MuseMorphose
 
+This repository contains the official implementation of the following paper:  
+
+* Shih-Lun Wu, Yi-Hsuan Yang  
+**_MuseMorphose_: Full-Song and Fine-Grained Music Style Transfer with Just One Transformer VAE**  
+_ArXiv preprint_, May 2021 [<a href="https://arxiv.org/abs/2105.04090" target="_blank">arXiv</a>]
+
+## Prerequisites
+* Python >= 3.6
+* Install dependencies
+```bash
+pip3 install -r requirements.txt
+```
+* GPU with >6GB RAM (optional, but recommended)
+
 ## Preprocessing
 ```bash
 # download REMI-pop-1.7K dataset
@@ -24,7 +38,7 @@ python3 train.py config/default.yaml
 wget -O musemorphose_pretrained_weights.pt https://zenodo.org/record/5119525/files/musemorphose_pretrained_weights.pt?download=1
 ```
 
-## Inference
+## Generation
 ```bash
 python3 generate.py [config file] [ckpt path] [output dir] [num pieces] [num samples per piece]
 ```
@@ -35,4 +49,20 @@ python3 generate.py config/default.yaml musemorphose_pretrained_weights.pt gener
 
 This script will randomly draw the specified # of pieces from the test set.  
 For each sample of a piece, the _rhythmic intensity_ and _polyphonicity_ will be shifted entirely and randomly by \[-3, 3\] classes for the model to generate style-transferred music.  
-You may modify `random_shift_attr_cls()` in `generate.py` or write your own function to set the attribute classes.
+You may modify `random_shift_attr_cls()` in `generate.py` or write your own function to set the attributes.
+
+## Customized Generation (To Be Added)
+We welcome the community's suggestions and contributions for an interface on which users may
+ * upload their own MIDIs, and 
+ * set their desired bar-level attributes easily
+
+## Citation BibTex
+If you find this work helpful and use our code in your research, please kindly cite our paper:
+```
+@article{musemorphose21arxiv,
+    title={{MuseMorphose}: Full-Song and Fine-Grained Music Style Transfer with Just One {Transformer VAE}},
+    author={Shih-Lun Wu and Yi-Hsuan Yang},
+    year={2021},
+    journal={arXiv preprint arXiv:2105.04090},
+}
+```
