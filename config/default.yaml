@@ -23,8 +23,8 @@ model:
     d_polyph_emb:     64
     d_rfreq_emb:      64
     cond_mode:        in-attn
-    pretrained_params_path:      ckpt/enc_dec_12L-16_bars-seqlen_1280/params/step_50-RC_0.345-KL_1.072-model.pt
-    pretrained_optim_path:       ckpt/enc_dec_12L-16_bars-seqlen_1280/optim/step_50-RC_0.345-KL_1.072-optim.pt
+    pretrained_params_path:      null
+    pretrained_optim_path:       null
 
 training:
     device:           cuda:0
