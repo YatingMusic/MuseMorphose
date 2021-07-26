@@ -4,7 +4,7 @@ This repository contains the official implementation of the following paper:
 
 * Shih-Lun Wu, Yi-Hsuan Yang  
 **_MuseMorphose_: Full-Song and Fine-Grained Music Style Transfer with Just One Transformer VAE**  
-_ArXiv preprint_, May 2021 [<a href="https://arxiv.org/abs/2105.04090" target="_blank">arXiv</a>]
+_ArXiv preprint_, May 2021 [<a href="https://arxiv.org/abs/2105.04090" target="_blank">arXiv</a>] [<a href="https://slseanwu.github.io/site-musemorphose/" target="_blank">demo website</a>]
 
 ## Prerequisites
 * Python >= 3.6
