@@ -60,7 +60,7 @@ We welcome the community's suggestions and contributions for an interface on whi
 If you find this work helpful and use our code in your research, please kindly cite our paper:
 ```
 @article{musemorphose21arxiv,
-    title={{MuseMorphose}: Full-Song and Fine-Grained Music Style Transfer with Just One {Transformer VAE}},
+    title={{MuseMorphose}: Full-Song and Fine-Grained Music Style Transfer with One {Transformer VAE}},
     author={Shih-Lun Wu and Yi-Hsuan Yang},
     year={2021},
     journal={arXiv preprint arXiv:2105.04090},
