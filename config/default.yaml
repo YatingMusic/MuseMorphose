@@ -4,9 +4,9 @@ data:
     val_split:        ./pickles/val_pieces.pkl
     test_split:       ./pickles/test_pieces.pkl
     vocab_path:       ./pickles/remi_vocab.pkl
-    max_bars:         16
+    max_bars:         16                 
     enc_seqlen:       128
-    dec_seqlen:       1280
+    dec_seqlen:       1280               
     batch_size:       4
 
 model:
@@ -49,3 +49,6 @@ generate:
     nucleus_p:                  0.9
     use_latent_sampling:        False
     latent_sampling_var:        0.0
+    max_bars:                   16       # could be set to match the longest input piece during generation (inference)
+    dec_seqlen:                 1280     # could be set to match the longest input piece during generation (inference)
+    max_input_dec_seqlen:       1024     # should be set to equal to or less than `dec_seqlen` used during training

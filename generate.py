@@ -197,8 +197,8 @@ if __name__ == "__main__":
     data_dir, vocab_path, 
     do_augment=False,
     model_enc_seqlen=config['data']['enc_seqlen'], 
-    model_dec_seqlen=config['data']['dec_seqlen'],
-    model_max_bars=config['data']['max_bars'],
+    model_dec_seqlen=config['generate']['dec_seqlen'],
+    model_max_bars=config['generate']['max_bars'],
     pieces=pickle_load(data_split),
     pad_to_same=False
   )
@@ -281,8 +281,8 @@ if __name__ == "__main__":
       # generate
       song, t_sec, entropies = generate_on_latent_ctrl_vanilla_truncate(
                                   model, p_latents, p_rfreq_cls, p_polyph_cls, dset.event2idx, dset.idx2event,
-                                  max_input_len=config['data']['dec_seqlen'], 
-                                  truncate_len=min(512, config['data']['dec_seqlen'] - 32), 
+                                  max_input_len=config['generate']['max_input_dec_seqlen'], 
+                                  truncate_len=min(512, config['generate']['max_input_dec_seqlen'] - 32), 
                                   nucleus_p=config['generate']['nucleus_p'], 
                                   temperature=config['generate']['temperature'],
                                   
