@@ -231,7 +231,7 @@ class REMIFullSongTransformerDataset(Dataset):
       bar_events = self.pitch_augment(bar_events)
 
     if self.use_attr_cls:
-      polyph_cls, rfreq_cls = self.get_attr_classes(self.pieces[idx].split('/')[-1], st_bar)
+      polyph_cls, rfreq_cls = self.get_attr_classes(os.path.basename(self.pieces[idx]), st_bar)
       polyph_cls_expanded = np.zeros((self.model_dec_seqlen,), dtype=int)
       rfreq_cls_expanded = np.zeros((self.model_dec_seqlen,), dtype=int)
       for i, (b_st, b_ed) in enumerate(zip(bar_pos[:-1], bar_pos[1:])):
@@ -257,7 +257,7 @@ class REMIFullSongTransformerDataset(Dataset):
 
     return {
       'id': idx,
-      'piece_id': int(self.pieces[idx].split('/')[-1].replace('.pkl', '')),
+      'piece_id': int(os.path.basename(self.pieces[idx]).replace('.pkl', '')),
       'st_bar_id': st_bar,
       'bar_pos': np.array(bar_pos, dtype=int),
       'enc_input': enc_inp,
