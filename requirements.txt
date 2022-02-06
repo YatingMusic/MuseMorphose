@@ -1,4 +1,5 @@
 torch>=1.6.0
+matplotlib==3.3.4
 miditoolkit
 PyYAML
 scipy
