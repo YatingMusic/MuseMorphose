@@ -3,3 +3,6 @@ miditoolkit
 PyYAML
 scipy
 numpy
+matplotlib
+pylab-sdk
+requests
