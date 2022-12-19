@@ -4,7 +4,7 @@ This repository contains the official implementation of the following paper:
 
 * Shih-Lun Wu, Yi-Hsuan Yang  
 **_MuseMorphose_: Full-Song and Fine-Grained Music Style Transfer with One Transformer VAE**  
-_ArXiv preprint_, May 2021 [<a href="https://arxiv.org/abs/2105.04090" target="_blank">arXiv</a>] [<a href="https://slseanwu.github.io/site-musemorphose/" target="_blank">demo website</a>]
+accepted to _IEEE/ACM Trans. Audio, Speech, & Language Processing (TASLP)_, Dec 2022 [<a href="https://arxiv.org/abs/2105.04090" target="_blank">arXiv</a>] [<a href="https://slseanwu.github.io/site-musemorphose/" target="_blank">demo website</a>]
 
 ## Prerequisites
 * Python >= 3.6
@@ -59,10 +59,10 @@ We welcome the community's suggestions and contributions for an interface on whi
 ## Citation BibTex
 If you find this work helpful and use our code in your research, please kindly cite our paper:
 ```
-@article{musemorphose21arxiv,
-    title={{MuseMorphose}: Full-Song and Fine-Grained Music Style Transfer with One {Transformer VAE}},
+@article{wu2023musemorphose,
+    title={{MuseMorphose}: Full-Song and Fine-Grained Piano Music Style Transfer with One {Transformer VAE}},
     author={Shih-Lun Wu and Yi-Hsuan Yang},
-    year={2021},
-    journal={arXiv preprint arXiv:2105.04090},
+    year={2023},
+    journal={IEEE/ACM Transactions on Audio, Speech, and Language Processing},
 }
 ```
